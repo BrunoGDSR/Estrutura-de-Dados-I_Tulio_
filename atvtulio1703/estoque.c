@@ -9,13 +9,10 @@ int main() {
     int soma_produtos[PRODUTOS] = {0};
     int i, j;
 
-    // Nomes dos setores
     char setores[SETORES][20] = {"Almoxarifado", "Informatica"};
 
-    // Nomes dos produtos
     char produtos[PRODUTOS][20] = {"Produto 1", "Produto 2", "Produto 3"};
 
-    // Entrada de dados
     printf("--- Cadastro de Estoque ---\n");
     for (i = 0; i < SETORES; i++) {
         printf("\nSetor: %s\n", setores[i]);
@@ -28,7 +25,6 @@ int main() {
         }
     }
 
-    // Exibir matriz com identificação
     printf("\n--- Estoque por Setor ---\n");
     for (i = 0; i < SETORES; i++) {
         printf("%s:\n", setores[i]);
@@ -38,7 +34,6 @@ int main() {
         printf("  Total do setor: %d\n", soma_setores[i]);
     }
 
-    // Soma total por produto (colunas)
     printf("\n--- Total por Produto (todos os setores) ---\n");
     for (j = 0; j < PRODUTOS; j++) {
         printf("%s: %d\n", produtos[j], soma_produtos[j]);
