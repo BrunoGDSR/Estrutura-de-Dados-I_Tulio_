@@ -1,0 +1,133 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Tarefa
+{
+    char descricao[100];
+    struct Tarefa *prox;
+} Tarefa;
+
+typedef struct
+{
+    Tarefa *topo;
+} Pilha;
+
+Pilha *criar_pilha()
+{
+    Pilha *p = (Pilha *)malloc(sizeof(Pilha));
+
+    p->topo = NULL;
+
+    return p;
+}
+
+void inserir_tarefa(Pilha *p)
+{
+    Tarefa *nova = (Tarefa *)malloc(sizeof(Tarefa));
+
+    printf("Digite a tarefa: ");
+    scanf(" %[^\n]", nova->descricao);
+
+    nova->prox = p->topo;
+
+    p->topo = nova;
+
+    printf("Tarefa adicionada!\n");
+}
+
+void obter_proxima_tarefa(Pilha *p)
+{
+    if (p->topo == NULL)
+    {
+        printf("Nenhuma tarefa na pilha!\n");
+    }
+    else
+    {
+        Tarefa *aux = p->topo;
+
+        printf("Proxima tarefa: %s\n", aux->descricao);
+
+        p->topo = aux->prox;
+
+        free(aux);
+    }
+}
+
+void mostrar_tarefas(Pilha *p)
+{
+    Tarefa *aux = p->topo;
+
+    if (aux == NULL)
+    {
+        printf("Pilha vazia!\n");
+        return;
+    }
+
+    while (aux != NULL)
+    {
+        printf("- %s\n", aux->descricao);
+
+        aux = aux->prox;
+    }
+}
+
+void liberar_pilha(Pilha *p)
+{
+    Tarefa *aux;
+
+    while (p->topo != NULL)
+    {
+        aux = p->topo;
+
+        p->topo = p->topo->prox;
+
+        free(aux);
+    }
+
+    free(p);
+}
+
+int main()
+{
+    Pilha *p = criar_pilha();
+
+    int opcao;
+
+    do
+    {
+        printf("\n1 - Inserir tarefa\n");
+        printf("2 - Obter proxima tarefa\n");
+        printf("3 - Mostrar tarefas\n");
+        printf("0 - Sair\n");
+
+        printf("Opcao: ");
+        scanf("%d", &opcao);
+
+        switch (opcao)
+        {
+        case 1:
+            inserir_tarefa(p);
+            break;
+
+        case 2:
+            obter_proxima_tarefa(p);
+            break;
+
+        case 3:
+            mostrar_tarefas(p);
+            break;
+
+        case 0:
+            liberar_pilha(p);
+            printf("Programa encerrado!\n");
+            break;
+
+        default:
+            printf("Opcao invalida!\n");
+        }
+
+    } while (opcao != 0);
+
+    return 0;
+}

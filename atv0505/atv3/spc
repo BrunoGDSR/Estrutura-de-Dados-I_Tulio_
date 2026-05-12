@@ -1,0 +1,169 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Container
+{
+    char nome[50];
+    int id;
+    char destino[50];
+
+    struct Container *prox;
+
+} Container;
+
+typedef struct
+{
+    Container *topo;
+
+} Pilha;
+
+Pilha *criar_pilha()
+{
+    Pilha *p = (Pilha *)malloc(sizeof(Pilha));
+
+    p->topo = NULL;
+
+    return p;
+}
+
+void inserir_container(Pilha *p)
+{
+    Container *novo = (Container *)malloc(sizeof(Container));
+
+    printf("Nome do container: ");
+    scanf(" %[^\n]", novo->nome);
+
+    printf("Numero de identificacao: ");
+    scanf("%d", &novo->id);
+
+    printf("Destino: ");
+    scanf(" %[^\n]", novo->destino);
+
+    novo->prox = p->topo;
+
+    p->topo = novo;
+
+    printf("Container inserido!\n");
+}
+
+void desembarcar_container(Pilha *p)
+{
+    if (p->topo == NULL)
+    {
+        printf("Nenhum container na pilha!\n");
+    }
+    else
+    {
+        Container *aux = p->topo;
+
+        printf("\nContainer removido:\n");
+        printf("Nome: %s\n", aux->nome);
+        printf("ID: %d\n", aux->id);
+        printf("Destino: %s\n", aux->destino);
+
+        p->topo = aux->prox;
+
+        free(aux);
+    }
+}
+
+void mostrar_containers(Pilha *p)
+{
+    Container *aux = p->topo;
+
+    if (aux == NULL)
+    {
+        printf("Pilha vazia!\n");
+        return;
+    }
+
+    while (aux != NULL)
+    {
+        printf("\nNome: %s\n", aux->nome);
+        printf("ID: %d\n", aux->id);
+        printf("Destino: %s\n", aux->destino);
+
+        aux = aux->prox;
+    }
+}
+
+void proximo_container(Pilha *p)
+{
+    if (p->topo == NULL)
+    {
+        printf("Nenhum container aguardando!\n");
+    }
+    else
+    {
+        printf("\nProximo container:\n");
+        printf("Nome: %s\n", p->topo->nome);
+        printf("ID: %d\n", p->topo->id);
+        printf("Destino: %s\n", p->topo->destino);
+    }
+}
+
+void liberar_pilha(Pilha *p)
+{
+    Container *aux;
+
+    while (p->topo != NULL)
+    {
+        aux = p->topo;
+
+        p->topo = p->topo->prox;
+
+        free(aux);
+    }
+
+    free(p);
+}
+
+int main()
+{
+    Pilha *p = criar_pilha();
+
+    int opcao;
+
+    do
+    {
+        printf("\n1 - Inserir container\n");
+        printf("2 - Desembarcar container\n");
+        printf("3 - Mostrar containers\n");
+        printf("4 - Proximo container\n");
+        printf("0 - Sair\n");
+
+        printf("Opcao: ");
+        scanf("%d", &opcao);
+
+        switch (opcao)
+        {
+        case 1:
+            inserir_container(p);
+            break;
+
+        case 2:
+            desembarcar_container(p);
+            break;
+
+        case 3:
+            mostrar_containers(p);
+            break;
+
+        case 4:
+            proximo_container(p);
+            break;
+
+        case 0:
+            liberar_pilha(p);
+            printf("Programa encerrado!\n");
+            break;
+
+        default:
+            printf("Opcao invalida!\n");
+        }
+
+    } while (opcao != 0);
+
+    return 0;
+}
